@@ -44,7 +44,7 @@ def get_code(number):
 with open('valid_ids.csv','a') as f:
     threads = []
     id_result = {}
-    with ThreadPoolExecutor(max_workers=30) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
 
         for number in reversed(range(100000,900000)):
             if number in archive.index:
