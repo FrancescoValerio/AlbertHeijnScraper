@@ -6,9 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
-
+import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+import pandas as pd
+archive = pd.read_csv('valid_ids.csv',sep=': ',index_col=0,names=['id','value'])
 # %%
 def return_ah_page_source(id):
     chrome_options = Options()
@@ -29,20 +30,33 @@ def return_ah_page_source(id):
         pass
     driver.quit()
     return valid_page, id
+def get_code(number):
+    try:
+        response = requests.get(f'https://www.ah.nl/producten/product/wi{number}/')
+    except requests.Timeout:
+        return 0, 0
+    if response.status_code == 404:
+        valid_page = False
+    if response.status_code == 200:
+        valid_page = True
+    return number, valid_page
+#%%
+with open('valid_ids.csv','a') as f:
+    threads = []
+    id_result = {}
+    with ThreadPoolExecutor(max_workers=30) as executor:
 
-threads = []
-valid_ids = []
-with ThreadPoolExecutor(max_workers=45) as executor:
-
-    for x in range(9999999):
-        threads.append(executor.submit(return_ah_page_source, x))
-
-    for task in as_completed(threads):
-        result, id = task.result()
-        if result:
-            valid_ids.append(id)
-        print('\r' + str(id), end ='') 
-
+        for number in reversed(range(100000,900000)):
+            if number in archive.index:
+                continue
+            threads.append(executor.submit(get_code, number))
+        for task in as_completed(threads):
+            id, result = task.result()
+            if id == 0 and task == 0:
+                print('connection problem occured')
+                break
+            id_result[id] = result
+            print(str(id) + ': '+str(result),file=f)
 #%%
 
 # %%
