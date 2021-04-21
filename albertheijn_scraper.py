@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.options import Options
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
-archive = pd.read_csv('valid_ids.csv',sep=': ',index_col=0,names=['id','value'])
+archive = pd.read_csv('valid_ids.csv',sep=': ',index_col=0,names=['id','value'], engine='python')
 # %%
 def return_ah_page_source(id):
     chrome_options = Options()
