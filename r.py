@@ -50,7 +50,7 @@ for ugly in product(string.ascii_uppercase, repeat = 6):
     else:
         input_list.append(number)
     
-    if len(input_list) == 1000:
+    if len(input_list) == 10000:
         print('starting request stream')
         
         now = datetime.now()
