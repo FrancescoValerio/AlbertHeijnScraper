@@ -30,6 +30,7 @@ def return_ah_page_source(id):
         pass
     driver.quit()
     return valid_page, id
+
 def get_code(number):
     try:
         response = requests.get(f'https://www.ah.nl/producten/product/wi{number}/')
