@@ -12,6 +12,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 import re
 from selenium.webdriver.chrome.options import Options
 from tqdm import tqdm
+import logging
+logging.getLogger("imported_module").setLevel(logging.WARNING)
 
 from pprint import pprint
 df = pd.read_csv('valid_ids.csv',sep=': ',index_col=0,names=['id','value'], engine='python')
