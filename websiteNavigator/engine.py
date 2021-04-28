@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 import re
+from selenium.webdriver.chrome.options import Options
+from tqdm import tqdm
 
 from pprint import pprint
 df = pd.read_csv('valid_ids.csv',sep=': ',index_col=0,names=['id','value'], engine='python')
@@ -20,9 +22,12 @@ shuffle(codes)
 #%%
 succes ={}
 database = {}
-for code in codes:
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+
+for code in tqdm(codes):
     succes[code] = False
-    driver = webdriver.Chrome(ChromeDriverManager(print_first_line=False, log_level=0).install())
+    driver = webdriver.Chrome(ChromeDriverManager(print_first_line=False, log_level=0).install(),options=chrome_options)
     url = 'https://www.ah.nl/producten/product/wi' + str(code)
     driver.get(url)
 
@@ -70,12 +75,13 @@ for code in codes:
     true_split = [s.split('\n',1) for s in split_info]
     for label, amount in true_split:
         database[code][label] = amount
-
+    '''
     pprint(product_name)
     pprint(price)
     pprint(weight)
     pprint(priceperkilo)
     pprint(nutritional_info)
+    '''
     driver.quit()
 
 # %%
