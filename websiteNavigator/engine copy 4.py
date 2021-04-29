@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from tqdm import tqdm
 import json
 
-code_index = '1'
+code_index = '4'
 df = pd.read_csv(f'./codeblocks/codeblock{code_index}.csv',index_col=0,names=['id'], engine='python')
 codes = df.index.tolist()
 
@@ -73,10 +73,8 @@ for code in tqdm(codes):
     }
     split_info = [re.sub(r'(\d+)', '\n\\1', nut,count=1) for nut in nutritional_info]
     true_split = [s.split('\n',1) for s in split_info]
-    for x in true_split:
-        if len(x)==2:
-            label, amount = x
-            database[code][label] = amount
+    for label, amount in true_split:
+        database[code][label] = amount
     '''
     pprint(product_name)
     pprint(price)

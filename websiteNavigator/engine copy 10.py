@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from tqdm import tqdm
 import json
 
-code_index = '1'
+code_index = '10'
 df = pd.read_csv(f'./codeblocks/codeblock{code_index}.csv',index_col=0,names=['id'], engine='python')
 codes = df.index.tolist()
 
